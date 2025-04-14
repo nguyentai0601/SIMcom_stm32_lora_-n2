@@ -18,13 +18,16 @@ Dự án sử dụng module Sim 4G để gửi bản tin lên MQTT Broker. Hiệ
 1. Kết nối phần cứng :
    - Kết nối chân TX, RX của STM32F103c8t6 tới chân RX, TX của module SIM (giao thức uart).
    - Cấp nguồn 4V-5V, 1-2A cho module Sim.
+    ![1](img/so_do_phan_cung.png)
    
 2. Tạo tài khoản trên Thingsboard.cloud:
    - Tạo 1 divice (thiết bị) trên thingsboard.cloud (MQTT broker)  để trao đổi dữ liệu giữa sever và module Sim.
+    ![2](img/divice.png)
    - Mỗi divice sẽ có các thông tin về Topic, ID , user và pass tương ứng để module Sim gửi data đúng nơi tránh nhầm lẫn dữ liệu.
+     ![dashboard](img/ID_user_pass.png)
    - Tạo Dashboards ( giao diện hiện thị). Tạo widget để hiện thị dữ liệu, để hiện thị nhiệt độ thì widget cần ứng với 1 divice  và key:temperature. 
 3. Sử dụng ATcommand:  
-   3.1. Kết nối MQTT  
+* 3.1. Kết nối MQTT  
    - Sử dụng lệnh "AT+CMQTTSTART" để bắt đầu kết nối MQTT. Nếu thành công sẽ trả về  
    " OK   
     +CMQTTSTART: 0 "  
@@ -44,7 +47,7 @@ Dự án sử dụng module Sim 4G để gửi bản tin lên MQTT Broker. Hiệ
      <keepalive_time>:Thời gian duy trì kết nối, trong khoảng 1- 64800s không có dữ liệu gửi từ client lên server thì sẽ gửi 1 bản tin duy trì kết nối.  
      <clean_session>: 1:Loại bỏ đăng ký client sau khi ngắt kết nối  
      <user_name>,<pass_word>: thông tin Tài khoản và mật khẩu của divice trên thingsboard.cloud  
-  3.2 Pulish dữ liệu lên server  
+* 3.2 Pulish dữ liệu lên server  
      - Sử dụng lệnh "AT+CMQTTTOPIC=<client_index>,<req_length>". Để nhập topic mà client gửi dữ liệu lên( publish)   
        <client_index>: thông số định nghĩa 1 client.  
        <req_length>: Độ dài chuỗi Topic  
@@ -59,5 +62,5 @@ Dự án sử dụng module Sim 4G để gửi bản tin lên MQTT Broker. Hiệ
     - Sử dụng lệnh :"AT+CMQTTPUB=<client_index>,<qos>,<pub_timeout> . Để puslish dữ liệu lên server    
   # Kết quả  
   4.1 hiện thị nhiệt độ , độ ẩm trên dashboard (nhiệt độ 35, độ ẩm 65)
-  ![dashboard](img/dashboard.png)
+  ![dashboard](img/Thingsboard.png)
 
