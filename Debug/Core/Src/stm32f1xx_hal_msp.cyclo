@@ -2,4 +2,4 @@
 ../Core/Src/stm32f1xx_hal_msp.c:92:6:HAL_SPI_MspInit	2
 ../Core/Src/stm32f1xx_hal_msp.c:133:6:HAL_SPI_MspDeInit	2
 ../Core/Src/stm32f1xx_hal_msp.c:163:6:HAL_UART_MspInit	2
-../Core/Src/stm32f1xx_hal_msp.c:206:6:HAL_UART_MspDeInit	2
+../Core/Src/stm32f1xx_hal_msp.c:203:6:HAL_UART_MspDeInit	2

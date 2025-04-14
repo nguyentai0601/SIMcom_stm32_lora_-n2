@@ -37,6 +37,8 @@
 char  Topic[50]= "v1/devices/me/telemetry";
 uint16_t count=0;
 uint8_t data[]="hello";
+uint8_t dataRX;
+uint8_t buff[50];
 char dataID[100];
 uint8_t dataRxloRa;
 uint8_t dataSent[]="hello";
@@ -139,17 +141,13 @@ void Task_action(char message){
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_USART1_UART_Init(void);
 void StartDefaultTask(void *argument);
 void StartTask02(void *argument);
 void StartTask03(void *argument);
 void StartinterruptTask(void *argument);
-void sendATCommand(const char *cmd, uint32_t delay_ms);
-void connectToGPRS();
-void connectToMQTT();
 
-void disconnectMQTT();
 /* USER CODE BEGIN PFP */
 //void process(){
 //	LoRa_receive(&myLoRa,&dataRxloRa,sizeof(dataRxloRa));
@@ -190,6 +188,7 @@ void publishToMQTT() {
     sendATCommand("AT+CMQTTPUB=0,1,60\r\n", 1000);
 }
 /* USER CODE END PFP */
+
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
@@ -219,13 +218,13 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+	HAL_UART_Transmit_IT(&huart1,&dataRX,sizeof(dataRX));
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART1_UART_Init();
   MX_SPI1_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   myLoRa = newLoRa();
 
@@ -244,11 +243,9 @@ int main(void)
   	myLoRa.DIO0_port       = DIO0_GPIO_Port;
   	myLoRa.DIO0_pin        = DIO0_Pin;
   	myLoRa.hSPIx           = &hspi1;
-
   	Lora_status = LoRa_init(&myLoRa);
-
   	LoRa_startReceiving(&myLoRa);
-
+  	connectToMQTT();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -618,7 +615,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   }
   /* USER CODE BEGIN Callback 1 */
 }
-
+	HAL_UART_RxCpltCallback( UART_HandleTypeDef* huart){
+		if(huart->Instance==USART1){
+			buff[count++]=dataRX;
+			if(dataRX=='\n'){
+				count=0;
+			}
+			HAL_UART_Transmit_IT(&huart1,&dataRX,sizeof(dataRX));
+		}
+	}
    void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	   if(GPIO_Pin==DIO0_Pin){
 		   printf("di vao ngat va giai phong semaphore\n");
