@@ -37,13 +37,13 @@ Dự án sử dụng module Sim 4G để gửi bản tin lên MQTT Broker. Hiệ
      <errcode> Là các list danh sách lỗi  
      Nếu MQTT đã được start.  
     " ERROR "   
-    - Sử dụng "AT+CMQTTACCQ: <client_index>, <clientID>,<server_type>" . được sử dụng để có được client MQTT. Nó phải được gọi trước tất cả các lệnh 
-  về kết nối MQTT và sau AT + CMQTTSTART
+    - Sử dụng "AT+CMQTTACCQ: <client_index>,clientID,<server_type>" . được sử dụng để có được client MQTT. Nó phải được gọi trước tất cả các lệnh 
+  về kết nối MQTT và sau AT + CMQTTSTART  
      <client_index>: 0-1  
-     <clientID> : ID của divice trên thingsboard.cloud  
+      clientID : ID của divice trên thingsboard.cloud  
      <server_type>: 0 : giao thức TCP-IP, 1: SSL-TLS: Tạo kết nối bảo mật giữa Serve và thiết bị  
     - Sử dụng  "AT+CMQTTCONNECT: 0,<server_addr>,<keepalive_time>,<clean_session>,<user_name>,<pass_word>" để kết nối MQTT tới server  
-     <server_addr>: Địa chỉ sever :" tcp://Thingsboard.cloud"  
+     <server_addr>: Địa chỉ sever :" tcp://Thingsboard.cloud:1883" Serve và client giao tiếp qua cổng port 1883    
      <keepalive_time>:Thời gian duy trì kết nối, trong khoảng 1- 64800s không có dữ liệu gửi từ client lên server thì sẽ gửi 1 bản tin duy trì kết nối.  
      <clean_session>: 1:Loại bỏ đăng ký client sau khi ngắt kết nối  
      <user_name>,<pass_word>: thông tin Tài khoản và mật khẩu của divice trên thingsboard.cloud  
